@@ -1,11 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campaign Pack Generator</title>
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --text: #1d1d1b;
+      --muted: #6b6b66;
+      --border: #e2e2dd;
+      --accent: #2f6f5e;
+      --accent-text: #ffffff;
+      --warn-bg: #fff7e0;
+      --warn-text: #6b4e00;
+      --error: #b3261e;
+      --radius: 10px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #161615;
+        --surface: #1f1f1d;
+        --text: #ececE7;
+        --muted: #9a9a93;
+        --border: #34342f;
+        --accent: #5fb39c;
+        --accent-text: #0f1f1a;
+        --warn-bg: #3a2f10;
+        --warn-text: #f3d98a;
+        --error: #ff8a80;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #161615;
+      --surface: #1f1f1d;
+      --text: #ececE7;
+      --muted: #9a9a93;
+      --border: #34342f;
+      --accent: #5fb39c;
+      --accent-text: #0f1f1a;
+      --warn-bg: #3a2f10;
+      --warn-text: #f3d98a;
+      --error: #ff8a80;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    main { max-width: 960px; margin: 0 auto; padding: 32px 16px 64px; }
+    h1 { font-size: 1.75rem; margin: 0 0 4px; }
+    h2 { font-size: 1.15rem; margin: 0; }
+    h3 { font-size: 0.95rem; margin: 0 0 6px; color: var(--muted); font-weight: 600; }
+    p.lead { margin: 0 0 24px; color: var(--muted); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .grid { display: grid; gap: 14px 16px; grid-template-columns: 1fr; }
+    @media (min-width: 640px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+      .full { grid-column: 1 / -1; }
+    }
+    label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+    .hint { display: block; font-weight: 400; color: var(--muted); font-size: 0.8rem; }
+    input, select, textarea {
+      width: 100%;
+      font: inherit;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 10px;
+    }
+    textarea { resize: vertical; min-height: 64px; }
+    input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; align-items: center; }
+    button {
+      font: inherit;
+      border-radius: 8px;
+      padding: 9px 16px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+    button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); font-weight: 600; }
+    button.small { padding: 4px 10px; font-size: 0.8rem; }
+    button:disabled { opacity: 0.5; cursor: default; }
+
+    .error { color: var(--error); font-weight: 600; margin: 12px 0 0; }
+    .notice {
+      background: var(--warn-bg);
+      color: var(--warn-text);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+    .notice ul { margin: 6px 0 0; padding-left: 20px; }
+
+    .section-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .copy {
+      white-space: pre-wrap;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 0 0 10px;
+      font: inherit;
+      font-size: 0.95rem;
+      overflow-x: auto;
+    }
+    .meta { color: var(--muted); font-size: 0.8rem; }
+    .over { color: var(--error); }
+    ol, ul.plain { padding-left: 20px; margin: 6px 0; }
+    ul.plain { list-style: none; padding-left: 0; }
+    ul.plain li { padding: 6px 0; border-bottom: 1px solid var(--border); }
+    ul.plain li:last-child { border-bottom: none; }
+    .tag { display: inline-block; font-size: 0.75rem; background: var(--bg); border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; margin: 0 4px 4px 0; }
+    .hidden { display: none !important; }
+  </style>
 </head>
 <body>
-    <p>damn it's good</p>
+  <main>
+    <h1>Campaign Pack Generator</h1>
+    <p class="lead">Describe your product and audience. Get captions, ad copy, an email, a campaign plan and content ideas you can edit and publish.</p>
+
+    <form id="brief" class="card" novalidate>
+      <div class="grid">
+        <div>
+          <label for="businessName">Business name <span class="hint">Optional</span></label>
+          <input id="businessName" name="businessName" autocomplete="organization" placeholder="Maple &amp; Oak Bakery">
+        </div>
+        <div>
+          <label for="productName">Product or service name <span class="hint">Required</span></label>
+          <input id="productName" name="productName" required placeholder="Sourdough subscription">
+        </div>
+        <div class="full">
+          <label for="description">What is it? <span class="hint">One or two sentences</span></label>
+          <textarea id="description" name="description" rows="2" placeholder="A weekly loaf baked the morning before delivery, from a local mill."></textarea>
+        </div>
+        <div>
+          <label for="industry">Industry</label>
+          <select id="industry" name="industry">
+            <option value="other">Other</option>
+            <option value="retail">Retail</option>
+            <option value="food">Food and drink</option>
+            <option value="services">Local services</option>
+            <option value="beauty">Beauty and wellness</option>
+            <option value="fitness">Fitness</option>
+            <option value="tech">Software and tech</option>
+          </select>
+        </div>
+        <div>
+          <label for="objective">Campaign goal</label>
+          <select id="objective" name="objective">
+            <option value="awareness">Build awareness</option>
+            <option value="leads">Generate leads</option>
+            <option value="sales">Drive sales</option>
+            <option value="loyalty">Retain customers</option>
+            <option value="launch">Launch something new</option>
+          </select>
+        </div>
+        <div>
+          <label for="audience">Target audience <span class="hint">Required. Who buys, and what they care about</span></label>
+          <input id="audience" name="audience" required placeholder="busy professionals in the city">
+        </div>
+        <div>
+          <label for="problem">Problem it solves <span class="hint">Optional</span></label>
+          <input id="problem" name="problem" placeholder="running out of bread before the weekend">
+        </div>
+        <div>
+          <label for="benefits">Key benefits <span class="hint">Short noun phrases, one per line or comma-separated. Up to 5</span></label>
+          <textarea id="benefits" name="benefits" rows="3" placeholder="no-waste fresh bread&#10;a delivery slot you choose"></textarea>
+        </div>
+        <div>
+          <label for="offer">Current offer <span class="hint">Optional</span></label>
+          <input id="offer" name="offer" placeholder="20% off your first month">
+          <label for="cta" style="margin-top:14px">Call to action <span class="hint">Optional. Defaults to the goal's CTA</span></label>
+          <input id="cta" name="cta" placeholder="Start my subscription">
+        </div>
+        <div>
+          <label for="tone">Tone</label>
+          <select id="tone" name="tone">
+            <option value="friendly">Friendly</option>
+            <option value="professional">Professional</option>
+            <option value="bold">Bold</option>
+            <option value="playful">Playful</option>
+          </select>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="submit" class="primary">Generate campaign pack</button>
+        <button type="button" id="regen" class="hidden">Regenerate variants</button>
+        <button type="button" id="download" class="hidden">Download .md</button>
+      </div>
+      <p id="formError" class="error hidden" role="alert"></p>
+    </form>
+
+    <section id="output" aria-live="polite"></section>
+  </main>
+
+  <script src="js/generator.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      var form = document.getElementById('brief');
+      var out = document.getElementById('output');
+      var formError = document.getElementById('formError');
+      var regenBtn = document.getElementById('regen');
+      var downloadBtn = document.getElementById('download');
+      var lastRaw = null;
+      var lastResult = null;
+      var seed = 0;
+
+      function readForm() {
+        var data = {};
+        new FormData(form).forEach(function (value, key) { data[key] = value; });
+        data.seed = seed;
+        return data;
+      }
+
+      function el(tag, className, text) {
+        var node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+
+      // Copy button that writes plain text; falls back quietly if clipboard is blocked.
+      function copyButton(getText) {
+        var btn = el('button', 'small', 'Copy');
+        btn.type = 'button';
+        btn.addEventListener('click', function () {
+          var text = getText();
+          var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, function () { btn.textContent = 'Copy failed'; });
+          } else {
+            btn.textContent = 'Copy failed';
+          }
+        });
+        return btn;
+      }
+
+      function section(title, body, copyText) {
+        var card = el('section', 'card');
+        var head = el('div', 'section-head');
+        head.appendChild(el('h2', '', title));
+        if (copyText) head.appendChild(copyButton(copyText));
+        card.appendChild(head);
+        card.appendChild(body);
+        return card;
+      }
+
+      function pre(text) {
+        return el('pre', 'copy', text);
+      }
+
+      function renderCaptions(captions) {
+        var wrap = el('div');
+        captions.forEach(function (c) {
+          wrap.appendChild(el('h3', '', c.platform));
+          wrap.appendChild(pre(c.text));
+          if (c.chars !== undefined) {
+            var meta = el('p', 'meta' + (c.chars > c.limit ? ' over' : ''), c.chars + ' / ' + c.limit + ' characters');
+            wrap.appendChild(meta);
+          }
+        });
+        return wrap;
+      }
+
+      function renderAds(ads) {
+        var wrap = el('div');
+        ads.sets.forEach(function (s, i) {
+          var item = el('div', '');
+          item.appendChild(el('h3', '', 'Variant ' + (i + 1)));
+          var lines = el('ul', 'plain');
+          var hl = el('li', '', 'Headlines (max ' + ads.limits.headline + ' chars): ' + s.headlines.join('  |  '));
+          hl.appendChild(el('div', 'meta', s.lengths.headlines.join(' / ') + ' characters'));
+          lines.appendChild(hl);
+          var dl = el('li', '', 'Description (max ' + ads.limits.description + ' chars): ' + s.description);
+          dl.appendChild(el('div', 'meta', s.lengths.description + ' characters'));
+          lines.appendChild(dl);
+          lines.appendChild(el('li', '', 'CTA: ' + s.cta));
+          item.appendChild(lines);
+          wrap.appendChild(item);
+        });
+        return wrap;
+      }
+
+      function renderEmail(email) {
+        var wrap = el('div');
+        wrap.appendChild(el('h3', '', 'Subject options (max ' + email.limits.subject + ' chars)'));
+        var ol = el('ol');
+        email.subjects.forEach(function (s) { ol.appendChild(el('li', '', s)); });
+        wrap.appendChild(ol);
+        wrap.appendChild(el('p', '', 'Preview text: ' + email.preview));
+        wrap.appendChild(el('h3', '', 'Body'));
+        wrap.appendChild(pre(email.body));
+        return wrap;
+      }
+
+      function renderCampaign(c) {
+        var wrap = el('div');
+        wrap.appendChild(el('h3', '', c.name));
+        wrap.appendChild(el('p', '', c.concept));
+        var tags = el('p');
+        c.channels.forEach(function (ch) { tags.appendChild(el('span', 'tag', ch)); });
+        wrap.appendChild(tags);
+        wrap.appendChild(el('h3', '', 'Four-week plan'));
+        var ol = el('ol');
+        c.weeks.forEach(function (w) { ol.appendChild(el('li', '', w)); });
+        wrap.appendChild(ol);
+        wrap.appendChild(el('p', '', 'Measure: ' + c.metric));
+        return wrap;
+      }
+
+      function renderIdeas(ideas) {
+        var ul = el('ul', 'plain');
+        ideas.forEach(function (i) {
+          var li = el('li');
+          li.appendChild(el('strong', '', i.format + ': '));
+          li.appendChild(document.createTextNode(i.idea));
+          ul.appendChild(li);
+        });
+        return ul;
+      }
+
+      function render(result) {
+        out.textContent = '';
+        var notice = el('div', 'notice');
+        notice.appendChild(el('strong', '', 'Before you publish'));
+        var nl = el('ul');
+        result.warnings.forEach(function (w) { nl.appendChild(el('li', '', w)); });
+        notice.appendChild(nl);
+        out.appendChild(notice);
+
+        out.appendChild(section('Social captions', renderCaptions(result.captions),
+          function () { return result.captions.map(function (c) { return c.platform + '\n' + c.text; }).join('\n\n'); }));
+        out.appendChild(section('Ad copy', renderAds(result.ads),
+          function () { return result.ads.sets.map(function (s) { return s.headlines.join(' | ') + '\n' + s.description; }).join('\n\n'); }));
+        out.appendChild(section('Email', renderEmail(result.email),
+          function () { return 'Subject: ' + result.email.subjects[0] + '\n' + result.email.body; }));
+        out.appendChild(section('Campaign idea', renderCampaign(result.campaign), null));
+        out.appendChild(section('Content ideas', renderIdeas(result.contentIdeas),
+          function () { return result.contentIdeas.map(function (i) { return '- ' + i.format + ': ' + i.idea; }).join('\n'); }));
+      }
+
+      function run(isRegen) {
+        if (isRegen) seed += 1; else seed = 0;
+        var raw = readForm();
+        var result = CampaignGenerator.generate(raw);
+        if (result.errors.length) {
+          formError.textContent = result.errors.join(' ');
+          formError.classList.remove('hidden');
+          regenBtn.classList.add('hidden');
+          downloadBtn.classList.add('hidden');
+          out.textContent = '';
+          return;
+        }
+        formError.classList.add('hidden');
+        lastRaw = raw;
+        lastResult = result;
+        render(result);
+        regenBtn.classList.remove('hidden');
+        downloadBtn.classList.remove('hidden');
+        out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      form.addEventListener('submit', function (e) { e.preventDefault(); run(false); });
+      regenBtn.addEventListener('click', function () { if (lastRaw) run(true); });
+      downloadBtn.addEventListener('click', function () {
+        if (!lastResult) return;
+        var blob = new Blob([CampaignGenerator.toMarkdown(lastResult)], { type: 'text/markdown' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'campaign-pack.md';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 0);
+      });
+    })();
+  </script>
 </body>
 </html>
