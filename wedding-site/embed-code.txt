@@ -84,7 +84,7 @@ html { scroll-snap-type: y proximity; }
 .lead { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); line-height: 1.6; }
 .names { font-family: var(--font-script); font-weight: 400; font-size: clamp(64px, 17vw, 86px); line-height: 1.05; color: var(--rose); }
 .names .amp { display: block; font-family: var(--font-display); font-style: italic; font-size: .4em; color: var(--gold-deep); margin: -2px 0 2px; }
-.fullnames { font-family: var(--font-display); font-size: 19px; font-weight: 500; color: var(--ink-soft); }
+.fullnames { font-family: var(--font-display); font-size: 19px; font-weight: 500; color: var(--ink-soft); text-wrap: balance; }
 .orn { display: flex; align-items: center; gap: 10px; color: var(--gold); }
 .orn::before, .orn::after { content: ""; height: 1px; width: 48px; background: currentColor; }
 .orn i { width: 7px; height: 7px; background: currentColor; transform: rotate(45deg); display: block; }
@@ -169,6 +169,12 @@ footer { background: var(--grain), var(--blush); text-align: center; padding-blo
 footer .names-sm { font-family: var(--font-script); font-size: 44px; color: var(--rose); line-height: 1.1; }
 footer p { margin: 0; color: var(--ink-soft); font-size: 15px; }
 footer svg { width: 120px; height: auto; }
+
+/* Inside a Google Sites embed the page runs in a fixed-height box, so screen-height pages are switched off there */
+html.embedded { scroll-snap-type: none; }
+html.embedded .panel { min-height: 0; padding-block: 28px; }
+html.embedded .page-card, html.embedded .hero .page-card { width: min(100%, 440px); min-height: 0; }
+html.embedded .cue { display: none; }
 
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
@@ -656,6 +662,11 @@ const ART = {
 
   "footer": () => wc(pad(36, 50, 26) + pad(86, 51, 22) + bud(26, 50, 34, -8) + bud(96, 50, 30, 8) + lotus(60, 48, .82))
 };
+
+/* Detect a Google Sites embed (pasted code runs on googleusercontent.com; a by-URL embed has a Google Sites referrer) */
+const EMBEDDED = /googleusercontent\.com$/.test(location.hostname) ||
+  (window.self !== window.top && /sites\.google\./.test(document.referrer || ""));
+if (EMBEDDED) document.documentElement.classList.add("embedded");
 
 /* Arch frames are redrawn to each card's real shape, so the arch never looks stretched */
 function drawFrames() {
