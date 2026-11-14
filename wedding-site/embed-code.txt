@@ -266,7 +266,7 @@ footer svg { width: 120px; height: auto; }
         <span class="day">Day one · Sunday 27 December</span>
         <h3>Haldi</h3>
         <div class="orn" aria-hidden="true"><i></i></div>
-        <p class="time">11:00 AM</p>
+        <p class="time">11:00 PM</p>
         <p class="desc">Come shower Rachana with turmeric, laughter and love as we bless her for the beautiful journey ahead.</p>
         <p class="theme"><span>Theme</span>Shades of Pink</p>
         <p class="where">Hardik Lawn, Nagpur</p>
