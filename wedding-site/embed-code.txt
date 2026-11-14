@@ -286,7 +286,7 @@ footer svg { width: 120px; height: auto; }
         <h3>Wedding</h3>
         <div class="orn" aria-hidden="true"><i></i></div>
         <p class="time">11:00 AM</p>
-        <p class="desc">Two hearts, two families and one beautiful beginning. Come celebrate with us as Rachana and Abhishek take their vows. Your presence will make this day truly memorable.</p>
+        <p class="desc">Two hearts, two families and one beautiful beginning. Come celebrate with us as Rachana and Abhishek take their vows.</p>
         <p class="theme"><span>Theme</span>Traditional Attire</p>
         <p class="where">Hardik Lawn, Nagpur</p>
       </div>
