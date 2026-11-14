@@ -74,9 +74,9 @@ html { scroll-snap-type: y proximity; }
 /* ---------- Home ---------- */
 .hero {
   background:
-    radial-gradient(ellipse 55% 45% at 12% 8%, rgba(126,148,121,.16), transparent 70%),
-    radial-gradient(ellipse 50% 40% at 92% 92%, rgba(156,85,96,.12), transparent 70%),
-    var(--grain), var(--blush);
+    radial-gradient(ellipse 55% 45% at 12% 8%, rgba(126,148,121,.18), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 92% 92%, rgba(196,160,100,.14), transparent 70%),
+    var(--grain), #DCE8EE;
 }
 .hero .page-card { width: min(100%, 480px, calc((100svh - 96px) * .64)); min-height: calc(100vh - 96px); min-height: calc(100svh - 96px); }
 .invite .text { gap: 16px; padding: 34% 11% 36%; }
@@ -201,7 +201,7 @@ footer svg { width: 120px; height: auto; }
       <feGaussianBlur in="d" stdDeviation="1.6"/>
     </filter>
 
-    <radialGradient id="wash-hero" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#FFFAF6"/><stop offset=".65" stop-color="#F9E9E3"/><stop offset="1" stop-color="#EFD4CB"/></radialGradient>
+    <radialGradient id="wash-hero" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#FCFDFD"/><stop offset=".62" stop-color="#EAF2F5"/><stop offset="1" stop-color="#C9DCE4"/></radialGradient>
     <radialGradient id="wash-haldi" cx=".5" cy=".45" r=".75"><stop offset="0" stop-color="#FFFAEA"/><stop offset=".6" stop-color="#FBEFC4"/><stop offset="1" stop-color="#F2DC97"/></radialGradient>
     <radialGradient id="wash-sangeet" cx=".5" cy=".45" r=".75"><stop offset="0" stop-color="#FFF6F1"/><stop offset=".6" stop-color="#F9E0D6"/><stop offset="1" stop-color="#EFC6B6"/></radialGradient>
     <radialGradient id="wash-venue" cx=".5" cy=".45" r=".75"><stop offset="0" stop-color="#FCFDF8"/><stop offset=".6" stop-color="#EEF2E6"/><stop offset="1" stop-color="#D5E0CB"/></radialGradient>
@@ -572,7 +572,7 @@ const ART = {
     swag(10, 2, 290, 2, 18, 10, (i, x, y) => i % 2 ? rose(x, y, 5.4) : rose(x, y, 4.4, PEACH), true)
   ),
   "hero-bottom": () => wc(
-    ground(171, 134, 160, 8, "#E4E8D6") +
+    ground(171, 134, 168, 10, "#C3D9E2") +
     lotusCluster(18, 134, .86, false) + lotusCluster(324, 134, .86, true) +
     petals(10, 110, 232, 126, 136, [ROSE[1], ROSE[0], PEACH[1]])
   ),
