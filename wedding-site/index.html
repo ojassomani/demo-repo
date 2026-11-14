@@ -123,12 +123,16 @@ section { padding-block: 72px; }
 
 /* ---------- Venue & RSVP pages (same illustrated card language) ---------- */
 .venue { background: var(--grain), var(--sage-pale); }
-.p-rsvp { background: var(--grain), #F4E3DD; }
+.p-rsvp { background: var(--grain), #ECE3EF; }
 .script-title { font-family: var(--font-script); font-weight: 400; line-height: 1.12; }
 .card.card-venue .text { gap: 7px; padding: 40% 10% 52%; }
 .card.card-rsvp .text { gap: 6px; padding: 31% 7% 40%; }
 .card-venue .script-title { font-size: clamp(52px, 13vw, 64px); color: var(--sage-deep); }
-.card-rsvp .script-title { font-size: clamp(52px, 13vw, 64px); color: var(--rose); }
+.card-rsvp .script-title { font-size: clamp(64px, 17vw, 80px); line-height: 1.15; color: #7B5A7E; }
+.card-rsvp .btn-rose { background: #7B5A7E; }
+.card-rsvp .btn-rose:hover { background: #684A6B; }
+.card-rsvp .btn-ghost { border-color: #D2C3D7; }
+.card-rsvp .contact { border-color: #D6C6DB; box-shadow: inset 0 0 0 3px rgba(255,251,246,.9), inset 0 0 0 4px #E8DDEB; }
 .addr { margin: 2px 0 0; font-family: var(--font-display); font-size: 23px; font-weight: 600; line-height: 1.25; }
 .addr span { display: block; font-family: var(--font-body); font-size: 15px; font-weight: 500; color: var(--ink-soft); }
 .card .note { margin: 0; color: var(--ink-soft); font-size: 15.5px; line-height: 1.5; max-width: 30ch; }
@@ -201,7 +205,7 @@ footer svg { width: 120px; height: auto; }
     <radialGradient id="wash-haldi" cx=".5" cy=".45" r=".75"><stop offset="0" stop-color="#FFFAEA"/><stop offset=".6" stop-color="#FBEFC4"/><stop offset="1" stop-color="#F2DC97"/></radialGradient>
     <radialGradient id="wash-sangeet" cx=".5" cy=".45" r=".75"><stop offset="0" stop-color="#FFF6F1"/><stop offset=".6" stop-color="#F9E0D6"/><stop offset="1" stop-color="#EFC6B6"/></radialGradient>
     <radialGradient id="wash-venue" cx=".5" cy=".45" r=".75"><stop offset="0" stop-color="#FCFDF8"/><stop offset=".6" stop-color="#EEF2E6"/><stop offset="1" stop-color="#D5E0CB"/></radialGradient>
-    <radialGradient id="wash-rsvp" cx=".5" cy=".45" r=".75"><stop offset="0" stop-color="#FFFAF7"/><stop offset=".6" stop-color="#FAE7E1"/><stop offset="1" stop-color="#EDCBC0"/></radialGradient>
+    <radialGradient id="wash-rsvp" cx=".5" cy=".45" r=".75"><stop offset="0" stop-color="#FDFAFD"/><stop offset=".6" stop-color="#F1E9F3"/><stop offset="1" stop-color="#DCCDE1"/></radialGradient>
     <radialGradient id="wash-shaadi" cx=".5" cy=".45" r=".75"><stop offset="0" stop-color="#FFFCF5"/><stop offset=".6" stop-color="#F7EEDC"/><stop offset="1" stop-color="#E9DAB9"/></radialGradient>
 
     <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ECD49A"/><stop offset="1" stop-color="#B08848"/></linearGradient>
@@ -329,7 +333,7 @@ footer svg { width: 120px; height: auto; }
       <svg class="art art-top" viewBox="0 0 300 150" aria-hidden="true" data-art="rsvp-top"></svg>
       <svg class="art art-bottom" viewBox="0 0 342 200" aria-hidden="true" data-art="rsvp-bottom"></svg>
       <div class="text">
-        <h2 class="script-title">RSVP</h2>
+        <h2 class="script-title">Rsvp</h2>
         <p class="note">Let us know you're coming. Call or send a WhatsApp message to either of us.</p>
         <div class="contacts">
           <div class="contact">
@@ -374,6 +378,7 @@ const P = {
 const MARI = [["#E5872B", "#EFA23B", "#F6C65B", "#B9651C"], ["#EDB63A", "#F3CB57", "#F8E096", "#C58E1E"]];
 const ROSE = ["#D98C98", "#E8AEB6", "#F5D6D9", "#B9677A"];
 const PEACH = ["#E6A288", "#F0BFA9", "#F8DDD0", "#C27A63"];
+const LILAC = ["#B49BC0", "#CBB7D5", "#E7DCEC", "#8C6E98"];
 const f = n => +n.toFixed(1);
 let seed = 7;
 const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
@@ -542,7 +547,7 @@ function thali(x, y) {
   return `<g transform="translate(${x} ${y})"><ellipse cy="4" rx="62" ry="14" fill="${P.goldD}" opacity=".45"/><ellipse rx="60" ry="13.5" fill="url(#gold)"/><ellipse rx="51" ry="10.5" fill="${P.goldL}"/><ellipse rx="42" ry="8" fill="none" stroke="${P.gold}" stroke-width=".8" stroke-dasharray="2 2.5"/>` +
     `<g transform="translate(-29 -1)"><ellipse rx="9.5" ry="3.6" fill="${P.goldD}"/><ellipse cy="-.6" rx="7.6" ry="2.5" fill="#C9475A"/></g>` +
     `<g transform="translate(29 -1)"><ellipse rx="9.5" ry="3.6" fill="${P.goldD}"/><ellipse cy="-.6" rx="7.6" ry="2.5" fill="#EDB938"/></g>` +
-    diya(0, -1, 1.45) + `</g><g filter="url(#ruffle)">${rose(x - 47, y + 3, 5.5)}${rose(x + 48, y + 2, 5, PEACH)}${marigold(x - 14, y + 5, 3.6, 0)}${marigold(x + 14, y + 6, 3.4, 1)}</g>`;
+    diya(0, -1, 1.45) + `</g><g filter="url(#ruffle)">${rose(x - 47, y + 3, 5.5)}${rose(x + 48, y + 2, 5, LILAC)}${marigold(x - 14, y + 5, 3.6, 0)}${marigold(x + 14, y + 6, 3.4, 1)}</g>`;
 }
 
 /* Arch frame: palace-arch outline with a painted wash inside and gold corner work */
@@ -637,18 +642,18 @@ const ART = {
   ),
   "rsvp-top": () => wc(
     strand(18, 0, 100, 8, (i, x, y) => i % 3 === 2 ? rose(x, y, 4) : `<circle cx="${x}" cy="${y}" r="1.9" fill="${P.gold}"/>`, "bell") +
-    strand(38, 0, 70, 8, (i, x, y) => i % 3 === 1 ? rose(x, y, 4, PEACH) : `<circle cx="${x}" cy="${y}" r="1.9" fill="${P.gold}"/>`, "bell") +
-    strand(262, 0, 70, 8, (i, x, y) => i % 3 === 1 ? rose(x, y, 4, PEACH) : `<circle cx="${x}" cy="${y}" r="1.9" fill="${P.gold}"/>`, "bell") +
+    strand(38, 0, 70, 8, (i, x, y) => i % 3 === 1 ? rose(x, y, 4, LILAC) : `<circle cx="${x}" cy="${y}" r="1.9" fill="${P.gold}"/>`, "bell") +
+    strand(262, 0, 70, 8, (i, x, y) => i % 3 === 1 ? rose(x, y, 4, LILAC) : `<circle cx="${x}" cy="${y}" r="1.9" fill="${P.gold}"/>`, "bell") +
     strand(282, 0, 100, 8, (i, x, y) => i % 3 === 2 ? rose(x, y, 4) : `<circle cx="${x}" cy="${y}" r="1.9" fill="${P.gold}"/>`, "bell") +
-    swag(0, 2, 300, 2, 20, 10, (i, x, y) => i % 2 ? rose(x, y, 5.6) : rose(x, y, 4.6, PEACH), true)
+    swag(0, 2, 300, 2, 20, 10, (i, x, y) => i % 2 ? rose(x, y, 5.6) : rose(x, y, 4.6, LILAC), true)
   ),
   "rsvp-bottom": () => wc(
-    ground(171, 196, 158, 12, "#F0D6CC") +
+    ground(171, 196, 158, 12, "#E2D7E8") +
     leaf(22, 202, 72, -72) + leaf(6, 202, 62, -104, P.leafD) + leaf(42, 202, 54, -40, P.leafL) +
     leaf(320, 202, 72, -108) + leaf(336, 202, 62, -76, P.leafD) + leaf(300, 202, 54, -140, P.leafL) +
-    `<g filter="url(#ruffle)">${rose(28, 184, 14)}${rose(56, 193, 10, PEACH)}${rose(10, 194, 9.5, PEACH)}${rose(46, 170, 7.5)}${rose(314, 184, 14, PEACH)}${rose(286, 193, 10)}${rose(332, 194, 9.5)}${rose(296, 170, 7.5, PEACH)}</g>` +
+    `<g filter="url(#ruffle)">${rose(28, 184, 14)}${rose(56, 193, 10, LILAC)}${rose(10, 194, 9.5, LILAC)}${rose(46, 170, 7.5)}${rose(314, 184, 14, LILAC)}${rose(286, 193, 10)}${rose(332, 194, 9.5)}${rose(296, 170, 7.5, LILAC)}</g>` +
     thali(171, 184) + diya(98, 196, 1.15) + diya(244, 196, 1.15) +
-    petals(16, 80, 262, 192, 204, [ROSE[0], ROSE[1], PEACH[0]])
+    petals(16, 80, 262, 192, 204, [ROSE[0], ROSE[1], LILAC[0]])
   ),
 
   "footer": () => wc(pad(36, 50, 26) + pad(86, 51, 22) + bud(26, 50, 34, -8) + bud(96, 50, 30, 8) + lotus(60, 48, .82))
